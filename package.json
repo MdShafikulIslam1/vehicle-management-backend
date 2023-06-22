@@ -1,0 +1,11 @@
+{
+  "name": "express-backend-setup",
+  "version": "1.0.0",
+  "description": "It is a template project for node-express-backend-setup.so that it can be used when needed just clone it",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "'Md shofikul Islam'",
+  "license": "ISC"
+}
