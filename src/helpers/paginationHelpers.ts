@@ -3,7 +3,7 @@ type IOptions = {
   page?: number;
   limit?: number;
   sortBy?: string;
-  SortOrder?: SortOrder;
+  sortOrder?: SortOrder;
 };
 
 type IOptionsResult = {
@@ -19,7 +19,7 @@ const calculatePagination = (options: IOptions): IOptionsResult => {
   const limit = Number(options.limit || 10);
   const skip = (page - 1) * limit;
   const sortBy = options.sortBy || 'createdAt';
-  const sortOrder = options.SortOrder || 'desc';
+  const sortOrder = options.sortOrder || 'desc';
   return {
     page,
     limit,
