@@ -1,22 +1,19 @@
-import mongoose, { Error } from 'mongoose';
 import { IGenericErrorResponse } from '../interfaces/common';
-import { IGenericErrorMessages } from '../interfaces/error';
 
 const handleValidationError = (
-  err: mongoose.Error.ValidationError
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  error: any
 ): IGenericErrorResponse => {
-  const errors: IGenericErrorMessages[] = Object.values(err.errors).map(
-    (el: Error.ValidatorError | Error.CastError) => {
-      return {
-        path: el?.path,
-        message: el?.message,
-      };
-    }
-  );
-
+  const errors = [
+    {
+      path: '',
+      message: error.message,
+    },
+  ];
+  const statusCode = 400;
   return {
-    statusCode: 500,
-    message: 'ValidationError',
+    statusCode,
+    message: 'Validation Error',
     errorMessages: errors,
   };
 };
