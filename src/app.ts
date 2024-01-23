@@ -9,14 +9,20 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+
+//Handle errors globally
 app.use(globalErrorHandler);
 
+
+//Test if api working
 app.get('/', (req, res) => {
   res.status(200).json({
     message: 'successfully working Express Backend setup Application',
   });
 });
 
+
+//page not found
 app.use((req: Request, res: Response, next: NextFunction) => {
   res.status(httpStatus.NOT_FOUND).json({
     success: false,
