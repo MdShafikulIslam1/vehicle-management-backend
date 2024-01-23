@@ -10,16 +10,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
-//Handle errors globally
-app.use(globalErrorHandler);
-
-
 //Test if api working
 app.get('/', (req, res) => {
   res.status(200).json({
     message: 'successfully working Express Backend setup Application',
   });
 });
+
+
+//Handle errors globally
+app.use(globalErrorHandler);
 
 
 //page not found
