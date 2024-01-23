@@ -4,4 +4,7 @@ dotenv.config({ path: path.join(process.cwd(), '.env') });
 export default {
   port: process.env.PORT,
   env: process.env.NODE_ENV,
+  jwt:{
+    secret_key:''
+  }
 };
