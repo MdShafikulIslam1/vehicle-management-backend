@@ -9,7 +9,12 @@ dotenv_1.default.config({ path: path_1.default.join(process.cwd(), '.env') });
 exports.default = {
     port: process.env.PORT,
     env: process.env.NODE_ENV,
+    salt_rounds: process.env.SALT_ROUNDS,
     jwt: {
-        secret_key: ''
+        secret_key: '',
+        accessToken: process.env.ACCESS_TOKEN,
+        refreshToken: process.env.REFRESH_TOKEN,
+        accessTokenExpiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN,
+        refreshTokenExpiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN,
     }
 };
