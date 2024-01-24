@@ -7,6 +7,7 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const http_status_1 = __importDefault(require("http-status"));
 const gobalErrorHandler_1 = __importDefault(require("./app/middlewares/gobalErrorHandler"));
+const routes_1 = __importDefault(require("./app/routes"));
 const app = (0, express_1.default)();
 //parser
 app.use((0, cors_1.default)());
@@ -18,6 +19,7 @@ app.get('/', (req, res) => {
         message: 'successfully working Express Backend setup Application',
     });
 });
+app.use('/api/v1', routes_1.default);
 //Handle errors globally
 app.use(gobalErrorHandler_1.default);
 //page not found

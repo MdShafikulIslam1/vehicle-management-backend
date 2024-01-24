@@ -2,6 +2,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import httpStatus from 'http-status';
 import globalErrorHandler from './app/middlewares/gobalErrorHandler';
+import rootRoute from './app/routes';
 const app = express();
 
 //parser
@@ -17,6 +18,7 @@ app.get('/', (req, res) => {
   });
 });
 
+app.use('/api/v1', rootRoute)
 
 //Handle errors globally
 app.use(globalErrorHandler);
