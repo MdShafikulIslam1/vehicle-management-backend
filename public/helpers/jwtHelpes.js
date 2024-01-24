@@ -11,6 +11,11 @@ const createToken = (payload, secretKey, expiresTime) => {
 const verifyToken = (token, secretKey) => {
     return jsonwebtoken_1.default.verify(token, secretKey);
 };
+// export const signJwt = async(payload: Object) => {
+//   return jwt.sign(payload, config.accessToken as Secret, {
+//       expiresIn:config.accessTokenExpiresIn,
+//   });
+// };
 exports.JwtHelpers = {
     createToken,
     verifyToken,
