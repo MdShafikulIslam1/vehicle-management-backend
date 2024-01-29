@@ -22,42 +22,46 @@ return next(err)
 }
 
 const getAllVehicleController:RequestHandler = async (req,res,next)=>{
-  const sortBy: string = req.query.sortBy as string || "id";
     try{
-    
-        const {page=1,size=10,sortOrder="asc",make,model,vehicleName,search}= req.query
+  const { page = 1, size = 10, sortBy = "id", sortOrder = "asc", make, model, vehicleName, search } = req.query;
  // Define filter conditions
   const filters: any = {
     AND: [],
   };
-    if (make) {
-    filters.AND.push({ price: { gte: parseFloat(make.toString()) } });
+  if (make) {
+    filters.AND.push({ make: { contains: make.toString() } });
   }
-    if (model) {
-    filters.AND.push({ price: { gte: parseFloat(model.toString()) } });
+
+  if (model) {
+    filters.AND.push({ model: { contains: model.toString() } });
   }
-    if (vehicleName) {
-    filters.AND.push({ price: { gte: parseFloat(vehicleName.toString()) } });
-  }
-    if (search) {
+
+  // Corrected filtering condition for vehicleName
+if (vehicleName) {
+  filters.AND.push({ vehicleName: { contains: vehicleName.toString() } });
+}
+
+  if (search) {
     filters.AND.push({
-      OR: [{ title: { contains: search.toString(), mode: "insensitive" } }],
+      OR: [{ vehicleName: { contains: search.toString(), mode: "insensitive" } }],
     });
   }
+
   const skip = (Number(page) - 1) * Number(size);
   const total = await prisma.vehicleProfile.count({
     where: filters,
   });
+
   const totalPage = Math.ceil(total / Number(size));
-const result = await prisma.vehicleProfile.findMany({
+
+  const result = await prisma.vehicleProfile.findMany({
     where: filters,
     skip,
     take: Number(size),
     orderBy: {
-      [sortBy]: sortOrder,
+      [sortBy as string]: sortOrder,
     },
   });
-
   return res.status(200).json({
     success: true,
     statusCode: 200,
@@ -71,7 +75,6 @@ const result = await prisma.vehicleProfile.findMany({
     data: result,
   });
     
-
     }catch(err){
       return  next(err)
     }
