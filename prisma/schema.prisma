@@ -1,5 +1,4 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// Prisma schema for Vehicle Management System
 
 generator client {
   provider = "prisma-client-js"
@@ -10,24 +9,124 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        String       @id @default(uuid())
-  name      String
-  email     String
-  password  String
-  phone     String
-  role      RoleEnumType @default(USER)
-  address   String
-  location  String
-  createAt  DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
-
-  @@map("users")
-}
-
+// Enumeration for user roles
 enum RoleEnumType {
   ADMIN
   USER
   DRIVER
   SUPER_ADMIN
 }
+
+// User model for authentication and authorization
+model User {
+  id        String       @id @default(uuid())
+  name      String
+  email     String
+  password  String
+  phone     String
+  avatar    String
+  role      RoleEnumType @default(USER)
+  address   String
+  location  String
+  createAt  DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  vehicles VehicleProfile[]
+  // drivers     Driver[]     @relation("drivers", fields: [id]) // Updated opposite relation for drivers
+}
+
+// Vehicle model
+model VehicleProfile {
+  id           String @id @default(uuid())
+  make         String
+  model        String
+  registration String
+  userId       String
+  user         User   @relation(fields: [userId], references: [id])
+  // maintenance    Maintenance[]   // One-to-Many relationship with maintenance tasks
+  // fuelExpenses   FuelExpense[]   // One-to-Many relationship with fuel expenses
+  // serviceRecords ServiceRecord[] // One-to-Many relationship with service records
+  // documents      Document[]      // One-to-Many relationship with documents
+  // drivers        Driver[]        @relation("vehicles", fields: [id]) // Opposite relation for drivers
+  // vendors        Vendor[]        @relation("vehicles", fields: [id]) // Opposite relation for vendors
+  // fuelCards      FuelCard[]      @relation("vehicles", fields: [id]) // Opposite relation for fuel cards
+}
+
+// Maintenance task model
+// model Maintenance {
+//   id         String    @id @default(uuid())
+//   task       String
+//   frequency  String
+//   lastDone   DateTime
+//   nextDue    DateTime
+//   vehicleId  String
+//   vehicle    Vehicle   @relation(fields: [vehicleId], references: [id])
+// }
+
+// Fuel expense model
+// model FuelExpense {
+//   id         String    @id @default(uuid())
+//   amount     Float
+//   date       DateTime
+//   vehicleId  String
+//   vehicle    Vehicle   @relation(fields: [vehicleId], references: [id])
+// }
+
+// Service record model
+// model ServiceRecord {
+//   id         String    @id @default(uuid())
+//   description String
+//   date       DateTime
+//   vehicleId  String
+//   vehicle    Vehicle   @relation(fields: [vehicleId], references: [id])
+// }
+
+// Document model
+// model Document {
+//   id         String    @id @default(uuid())
+//   name       String
+//   url        String
+//   vehicleId  String
+//   vehicle    Vehicle   @relation(fields: [vehicleId], references: [id])
+// }
+
+// Driver model
+// model Driver {
+//   id         String    @id @default(uuid())
+//   name       String
+//   vehicles   Vehicle[] @relation("drivers", fields: [id]) // Opposite relation for drivers
+// }
+
+// Vendor model
+// model Vendor {
+//   id         String    @id @default(uuid())
+//   name       String
+//   vehicles   Vehicle[] @relation("vendors", fields: [id]) // Opposite relation for vendors
+// }
+
+// Fuel card model
+// model FuelCard {
+//   id         String    @id @default(uuid())
+//   cardNumber String
+//   vehicles   Vehicle[] @relation("fuelCards", fields: [id]) // Opposite relation for fuel cards
+// }
+
+// UserPermission model for controlling access levels
+// model UserPermission {
+//   id         String    @id @default(uuid())
+//   userId     String
+//   vehicleId  String
+//   user       User      @relation(fields: [userId], references: [id])
+//   vehicle    Vehicle   @relation(fields: [vehicleId], references: [id])
+//   role       RoleEnumType // Fixed type to match User model
+// }
+
+// DriverPerformance model for monitoring driver behavior
+// model DriverPerformance {
+//   id         String    @id @default(uuid())
+//   driverId   String
+//   vehicleId  String
+//   driver     Driver    @relation(fields: [driverId], references: [id])
+//   vehicle    Vehicle   @relation(fields: [vehicleId], references: [id])
+//   // Add other performance metrics
+// }
