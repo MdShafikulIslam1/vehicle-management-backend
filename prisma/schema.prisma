@@ -39,6 +39,7 @@ model User {
 model VehicleProfile {
   id           String @id @default(uuid())
   make         String
+  vehicleName  String
   model        String
   registration String
   userId       String
@@ -94,7 +95,10 @@ model VehicleProfile {
 // model Driver {
 //   id         String    @id @default(uuid())
 //   name       String
-//   vehicles   Vehicle[] @relation("drivers", fields: [id]) // Opposite relation for drivers
+//   driverId   String
+//   vehicleId  String
+//   drivers     User[] @relation(fields: [driverId], references: [id])
+//   vehicles   VehicleProfile[] @relation(fields: [vehicleId], references: [id]) // Opposite relation for drivers
 // }
 
 // Vendor model
