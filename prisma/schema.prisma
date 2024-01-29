@@ -60,7 +60,7 @@ model VehicleProfile {
   sitting_capacity       String
   chassis_no             String
   userId                 String
-  user                   User     @relation(fields: [userId], references: [id])
+  user                   User     @relation(fields: [userId], references: [id],onDelete: Cascade,onUpdate: Cascade)
 
   // year         String
   // price        String
@@ -92,7 +92,7 @@ model Maintenance {
   currentDate DateTime
   nextDue     DateTime
   vehicleId   String
-  vehicle     VehicleProfile @relation(fields: [vehicleId], references: [id])
+  vehicle     VehicleProfile @relation(fields: [vehicleId], references: [id],onDelete: Cascade,onUpdate: Cascade)
 
   createAt  DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -131,7 +131,10 @@ model Maintenance {
 // model Driver {
 //   id         String    @id @default(uuid())
 //   name       String
-//   vehicles   Vehicle[] @relation("drivers", fields: [id]) // Opposite relation for drivers
+//   driverId   String
+//   vehicleId  String
+//   drivers     User[] @relation(fields: [driverId], references: [id])
+//   vehicles   VehicleProfile[] @relation(fields: [vehicleId], references: [id]) // Opposite relation for drivers
 // }
 
 // Vendor model
