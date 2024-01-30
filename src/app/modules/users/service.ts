@@ -1,9 +1,13 @@
-import { PrismaClient, RoleEnumType } from "@prisma/client";
+import { Prisma, PrismaClient, RoleEnumType, User } from "@prisma/client";
 import { comparePasswords, hashPassword } from "../../../helpers/hashPass";
 import { JwtHelpers } from "../../../helpers/jwtHelpes";
 import config from "../../../config";
 import ApiError from "../../../error/ApiError";
 import httpStatus from "http-status";
+import { IFilters, IPaginationOptions } from "../../../interfaces/paginationOptions";
+import { paginationHelpers } from "../../../helpers/paginationHelpers";
+import { IGenericResponse } from "../../../interfaces/common";
+import { IUserResponse, user_fields_constant } from "./interface";
 
 
 const prisma = new PrismaClient()
@@ -78,10 +82,85 @@ const registerService=async(payload:any)=>{
     }
 }
 
+const getAllService = async (
+    paginatinOptions: IPaginationOptions,
+    filterOptions: IFilters
+  ): Promise<IGenericResponse<IUserResponse[]>> => {
+    const { searchTerm, ...filterData } = filterOptions;
+    const { limit, page, skip } =
+      paginationHelpers.calculatePagination(paginatinOptions);
+  
+    const andConditions = [];
+  
+    //searching code
+    if (searchTerm) {
+      andConditions.push({
+        OR: user_fields_constant.map(field => {
+          return {
+            [field]: {
+              contains: searchTerm,
+              mode: 'insensitive'
+            }
+          };
+        })
+      });
+    }
+  
+    //filtering code
+    if (Object.keys(filterData).length > 0) {
+      andConditions.push({
+        AND: Object.keys(filterData).map(key => ({
+          [key]: {
+            equals: (filterData as any)[key]
+          }
+        }))
+      });
+    }
+
+    const whereCondition: Prisma.UserWhereInput =
+      andConditions.length > 0 ? { AND: andConditions } : {};
+  
+    const result = await prisma.user.findMany({
+      where: whereCondition,
+      skip,
+      take: limit,
+      orderBy:
+        paginatinOptions.sortBy && paginatinOptions.sortOrder
+          ? {
+              [paginatinOptions.sortBy]: paginatinOptions.sortOrder
+            }
+          : { createAt: 'asc' },
+      select: {
+        id: true,
+        name:true,
+        email:true,
+        address:true,
+        location:true,
+        avatar:true,
+        phone:true,
+        role:true
+      }
+    });
+  
+    const total = await prisma.user.count();
+  
+    return {
+      meta: {
+        limit,
+        page,
+        total
+      },
+      data: result
+    };
+  };
+
+
+
 
 
 
 export const AuthServices = {
     loginService,
-    registerService
+    registerService,
+    getAllService
 }

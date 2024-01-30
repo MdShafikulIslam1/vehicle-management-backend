@@ -5,11 +5,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthRouter = void 0;
 const express_1 = __importDefault(require("express"));
-const validateUser_1 = __importDefault(require("../../middlewares/validateUser"));
 const controller_1 = require("./controller");
-const validation_1 = require("./validation");
+// import { authControllers } from './controller'
 const router = express_1.default.Router();
-router.post('/signIn', controller_1.authControllers.loginController);
-router.post('/register', (0, validateUser_1.default)(validation_1.userValidation.register), controller_1.authControllers.registerController);
-router.get('/allUser', controller_1.authControllers.allUserControler);
+router.post('/vehicle-profile', controller_1.vehicleController.createVehicleController);
+router.get('/vehicle-profile', controller_1.vehicleController.getAllVehicleController);
+router.delete('/vehicle-profile', controller_1.vehicleController.deleteVehicleController);
+router.patch('/vehicle-profile', controller_1.vehicleController.updateVehicleController);
 exports.AuthRouter = router;
