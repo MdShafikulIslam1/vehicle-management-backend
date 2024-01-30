@@ -16,6 +16,8 @@ exports.authControllers = void 0;
 const service_1 = require("./service");
 const sendResponse_1 = __importDefault(require("../../../shared/sendResponse"));
 const http_status_1 = __importDefault(require("http-status"));
+const pick_1 = __importDefault(require("../../../shared/pick"));
+const paginationOptions_1 = require("../../../common/paginationOptions");
 const loginController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const response = yield service_1.AuthServices.loginService(req.body);
@@ -44,7 +46,24 @@ const registerController = (req, res, next) => __awaiter(void 0, void 0, void 0,
         next(error);
     }
 });
+const allUserControler = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const filterOptions = (0, pick_1.default)(req.query, ['name', 'email', 'phone', 'address', 'location']);
+        const paginationOptions = (0, pick_1.default)(req.query, paginationOptions_1.paginationOptionFields);
+        const response = yield service_1.AuthServices.getAllService(paginationOptions, filterOptions);
+        (0, sendResponse_1.default)(res, {
+            statusCode: http_status_1.default.OK,
+            success: true,
+            message: "Users retrieved successfully",
+            data: response,
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+});
 exports.authControllers = {
     loginController,
-    registerController
+    registerController,
+    allUserControler
 };
