@@ -34,7 +34,7 @@ const updateVehicleProfileService = async (data: any, id: string) => {
     return result;
   };
 
-  const DeletevehicleProfileService = async (id: string) => {
+const DeletevehicleProfileService = async (id: string) => {
     const result = await prisma.vehicleProfile.delete({
       where: {
         id,

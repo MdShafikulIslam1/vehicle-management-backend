@@ -4,3 +4,7 @@ export type IPaginationOptions = {
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
 };
+
+export type IFilters ={
+  searchTerm?:string
+}
