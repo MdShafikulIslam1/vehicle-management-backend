@@ -27,7 +27,7 @@ const createController: RequestHandler = async (req, res, next) => {
 const getAllController: RequestHandler = async (req, res, next) => {
 
 try {
-  const filterOptions = pick(req.query, ['name', 'location', 'owner'])
+  const filterOptions = pick(req.query, ['task','lastDone','nextDue'])
   const paginationOptions = pick(req.query, paginationOptionFields)
   const response = await maintenanceService.getAllService(paginationOptions,filterOptions)
   sendResponse(res, {

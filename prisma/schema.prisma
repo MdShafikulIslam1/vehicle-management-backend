@@ -24,14 +24,14 @@ model User {
   email     String
   password  String
   phone     String
-  avatar    String
+  avatar    String?
   role      RoleEnumType @default(USER)
   address   String
   location  String
   createAt  DateTime     @default(now())
   updatedAt DateTime     @updatedAt
 
-  vehicles VehicleProfile[]
+  vehicleProfiles VehicleProfile[]
   // drivers     Driver[]     @relation("drivers", fields: [id]) // Updated opposite relation for drivers
 
   @@map("users")
@@ -60,7 +60,7 @@ model VehicleProfile {
   sitting_capacity       String
   chassis_no             String
   userId                 String
-  user                   User     @relation(fields: [userId], references: [id],onDelete: Cascade,onUpdate: Cascade)
+  user                   User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   // year         String
   // price        String
@@ -75,24 +75,24 @@ model VehicleProfile {
   // drivers        Driver[]        @relation("vehicles", fields: [id]) // Opposite relation for drivers
   // vendors        Vendor[]        @relation("vehicles", fields: [id]) // Opposite relation for vendors
   // fuelCards      FuelCard[]      @relation("vehicles", fields: [id]) // Opposite relation for fuel cards
-  Maintenance Maintenance[]
-  createAt    DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  maintenances Maintenance[]
+  createAt     DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 
-  @@map("vehicles")
+  @@map("vehicleProfiles")
 }
 
 // Maintenance task model
 model Maintenance {
-  id          String         @id @default(uuid())
-  task        String
-  frequency   String
-  expense     String
-  lastDone    DateTime
-  currentDate DateTime
-  nextDue     DateTime
-  vehicleId   String
-  vehicle     VehicleProfile @relation(fields: [vehicleId], references: [id],onDelete: Cascade,onUpdate: Cascade)
+  id                  String         @id @default(uuid())
+  task                String
+  repair_shop_address String
+  expense             String
+  lastDone            DateTime
+  currentDate         DateTime
+  nextDue             DateTime
+  vehicleProfileId    String
+  vehicleProfile      VehicleProfile @relation(fields: [vehicleProfileId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   createAt  DateTime @default(now())
   updatedAt DateTime @updatedAt

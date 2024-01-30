@@ -7,78 +7,78 @@ import { PrismaClient } from "@prisma/client"
 const prisma = new PrismaClient()
 
 
-const createVehicleController:RequestHandler = async (req,res,next)=>{
-try{
+const createVehicleController: RequestHandler = async (req, res, next) => {
+  try {
     const result = await vehicleProfileService.createVehicleService(req.body)
-   return  sendResponse(res,{
-        statusCode:httpStatus.OK,
-        success:true,
-        message:'Vehicle added successful',
-        data:result
+    return sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Vehicle added successful',
+      data: result
     })
-}catch(err){
-return next(err)
-}
+  } catch (err) {
+    return next(err)
+  }
 }
 
-const getAllVehicleController:RequestHandler = async (req,res,next)=>{
+const getAllVehicleController: RequestHandler = async (req, res, next) => {
   const sortBy: string = req.query.sortBy as string || "id";
-    try{
-    
-        const {page=1,size=10,sortOrder="asc",make,model,vehicleName,search}= req.query
- // Define filter conditions
-  const filters: any = {
-    AND: [],
-  };
+  try {
+
+    const { page = 1, size = 10, sortOrder = "asc", make, model, vehicleName, search } = req.query
+    // Define filter conditions
+    const filters: any = {
+      AND: [],
+    };
     if (make) {
-    filters.AND.push({ price: { gte: parseFloat(make.toString()) } });
-  }
-    if (model) {
-    filters.AND.push({ price: { gte: parseFloat(model.toString()) } });
-  }
-    if (vehicleName) {
-    filters.AND.push({ price: { gte: parseFloat(vehicleName.toString()) } });
-  }
-    if (search) {
-    filters.AND.push({
-      OR: [{ title: { contains: search.toString(), mode: "insensitive" } }],
-    });
-  }
-  const skip = (Number(page) - 1) * Number(size);
-  const total = await prisma.vehicleProfile.count({
-    where: filters,
-  });
-  const totalPage = Math.ceil(total / Number(size));
-const result = await prisma.vehicleProfile.findMany({
-    where: filters,
-    skip,
-    take: Number(size),
-    orderBy: {
-      [sortBy]: sortOrder,
-    },
-  });
-
-  return res.status(200).json({
-    success: true,
-    statusCode: 200,
-    message: "Books fetched successfully",
-    meta: {
-      page: Number(page),
-      size: Number(size),
-      total,
-      totalPage,
-    },
-    data: result,
-  });
-    
-
-    }catch(err){
-      return  next(err)
+      filters.AND.push({ price: { gte: parseFloat(make.toString()) } });
     }
+    if (model) {
+      filters.AND.push({ price: { gte: parseFloat(model.toString()) } });
+    }
+    if (vehicleName) {
+      filters.AND.push({ price: { gte: parseFloat(vehicleName.toString()) } });
+    }
+    if (search) {
+      filters.AND.push({
+        OR: [{ title: { contains: search.toString(), mode: "insensitive" } }],
+      });
+    }
+    const skip = (Number(page) - 1) * Number(size);
+    const total = await prisma.vehicleProfile.count({
+      where: filters,
+    });
+    const totalPage = Math.ceil(total / Number(size));
+    const result = await prisma.vehicleProfile.findMany({
+      where: filters,
+      skip,
+      take: Number(size),
+      orderBy: {
+        [sortBy]: sortOrder,
+      },
+    });
+
+    return res.status(200).json({
+      success: true,
+      statusCode: 200,
+      message: "Books fetched successfully",
+      meta: {
+        page: Number(page),
+        size: Number(size),
+        total,
+        totalPage,
+      },
+      data: result,
+    });
+
+
+  } catch (err) {
+    return next(err)
+  }
 
 }
 
-const deleteVehicleController: RequestHandler = async (req, res,next) => {
+const deleteVehicleController: RequestHandler = async (req, res, next) => {
   try {
     // const isAdmin = req?.user?.role === "admin" || "super-admin";
     // // console.log(isAdmin, "ata req");
@@ -89,19 +89,19 @@ const deleteVehicleController: RequestHandler = async (req, res,next) => {
     //     message: "Unauthorized access",
     //   });
     // }
-    const id =  req?.params?.id;
+    const id = req?.params?.id;
     const result = await vehicleProfileService.DeletevehicleProfileService(id);
-    return  sendResponse(res,{
-      statusCode:httpStatus.OK,
-      success:true,
-      message:'Vehicle deleted successful',
-      data:result
-  })
-}catch(err){
-return next(err)
-}
+    return sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Vehicle deleted successful',
+      data: result
+    })
+  } catch (err) {
+    return next(err)
+  }
 };
-const updateVehicleController: RequestHandler = async (req,res,next
+const updateVehicleController: RequestHandler = async (req, res, next
 ) => {
   try {
     // const isAdmin = req?.user?.role === "admin";
@@ -112,26 +112,26 @@ const updateVehicleController: RequestHandler = async (req,res,next
     //     message: "Unauthorized access",
     //   });
     // }
-    const id =  req?.params?.id;
+    const id = req?.params?.id;
     const data = req.body;
     const result = await vehicleProfileService.updateVehicleProfileService(data, id);
-    return  sendResponse(res,{
-      statusCode:httpStatus.OK,
-      success:true,
-      message:'Vehicle uodated successful',
-      data:result
-  })
-}catch(err){
-return next(err)
-}
+    return sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Vehicle uodated successful',
+      data: result
+    })
+  } catch (err) {
+    return next(err)
+  }
 };
 
 
 export const vehicleController = {
-    createVehicleController,
-    getAllVehicleController,
-    deleteVehicleController,
-    updateVehicleController
+  createVehicleController,
+  getAllVehicleController,
+  deleteVehicleController,
+  updateVehicleController
 }
 
 

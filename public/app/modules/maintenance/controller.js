@@ -36,7 +36,7 @@ const createController = (req, res, next) => __awaiter(void 0, void 0, void 0, f
 });
 const getAllController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const filterOptions = (0, pick_1.default)(req.query, ['name', 'location', 'owner']);
+        const filterOptions = (0, pick_1.default)(req.query, ['task', 'lastDone', 'nextDue']);
         const paginationOptions = (0, pick_1.default)(req.query, paginationOptions_1.paginationOptionFields);
         const response = yield service_1.maintenanceService.getAllService(paginationOptions, filterOptions);
         (0, sendResponse_1.default)(res, {

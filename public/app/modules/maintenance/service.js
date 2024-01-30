@@ -71,15 +71,15 @@ const getAllService = (paginatinOptions, filterOptions) => __awaiter(void 0, voi
         select: {
             id: true,
             task: true,
-            frequency: true,
+            repair_shop_address: true,
             expense: true,
             lastDone: true,
             nextDue: true,
             currentDate: true,
-            vehicleId: true,
+            vehicleProfileId: true,
             createAt: true,
             updatedAt: true,
-            vehicle: {
+            vehicleProfile: {
                 select: {
                     vehicle_make: true,
                     photo: true,
