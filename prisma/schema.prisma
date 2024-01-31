@@ -41,9 +41,10 @@ model User {
 model VehicleProfile {
   id                     String   @id @default(uuid())
   vehicle_make           String
+  vehicleName            String
   photo                  String
-  purchase_date          DateTime
-  registeration_date     DateTime
+  purchase_date          String
+  registeration_date     String
   color                  String
   registeration_validity String
   present_km             String
