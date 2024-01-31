@@ -79,6 +79,15 @@ const getAllVehicleService = async (
     };
   };
 
+  const getSingleVehicleService = async (id: string) => {
+    const result = await prisma.vehicleProfile.findUnique({
+      where: {
+        id,
+      },
+    });
+    return result;
+  };
+
 const updateVehicleProfileService = async (data: any, id: string) => {
   const result = await prisma.vehicleProfile.update({
     where: {
@@ -100,6 +109,7 @@ const DeletevehicleProfileService = async (id: string) => {
 
 export const vehicleProfileService = {
   createVehicleService,
+  getSingleVehicleService,
   getAllVehicleService,
   updateVehicleProfileService,
   DeletevehicleProfileService,

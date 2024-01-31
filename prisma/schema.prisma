@@ -61,7 +61,6 @@ model VehicleProfile {
   sitting_capacity       String
   chassis_no             String
   userId                 String
-
   user                   User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   // year                   String
   // vin                    String

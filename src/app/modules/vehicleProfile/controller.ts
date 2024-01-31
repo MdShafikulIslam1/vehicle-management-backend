@@ -45,16 +45,37 @@ const getAllVehicleController: RequestHandler = async (req, res, next) => {
       'sitting_capacity',
       'chassis_no',
       'userId',
-    ])
-    const paginationOptions = pick(req.query, paginationOptionFields)
-    
-    const response = await vehicleProfileService.getAllVehicleService(paginationOptions,filterOptions)
-   return sendResponse(res, {
-        statusCode: httpStatus.OK,
-        success: true,
-        message: "vehicleProfile retrieved successfully",
-        data: response,
-      });
+    ]);
+    const paginationOptions = pick(req.query, paginationOptionFields);
+
+    const response = await vehicleProfileService.getAllVehicleService(
+      paginationOptions,
+      filterOptions
+    );
+    return sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'vehicleProfile retrieved successfully',
+      data: response,
+    });
+  } catch (err) {
+    return next(err);
+  }
+};
+const getSingleVehicleController: RequestHandler = async (
+  req: any,
+  res: any,
+  next: any
+) => {
+  try {
+    const id = await req?.params?.id;
+    const result = await vehicleProfileService.getSingleVehicleService(id);
+    return sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Single Vehicle get successful',
+      data: result,
+    });
   } catch (err) {
     return next(err);
   }
@@ -115,4 +136,5 @@ export const vehicleController = {
   getAllVehicleController,
   deleteVehicleController,
   updateVehicleController,
+  getSingleVehicleController,
 };
