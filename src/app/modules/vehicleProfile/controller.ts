@@ -1,82 +1,85 @@
-import { RequestHandler } from "express"
-import { vehicleProfileService } from "./service"
-import sendResponse from "../../../shared/sendResponse"
-import httpStatus from "http-status"
-import { PrismaClient } from "@prisma/client"
+import { RequestHandler } from 'express';
+import { vehicleProfileService } from './service';
+import sendResponse from '../../../shared/sendResponse';
+import httpStatus from 'http-status';
+import { PrismaClient } from '@prisma/client';
+import pick from '../../../shared/pick';
+import { paginationOptionFields } from '../../../common/paginationOptions';
 
-const prisma = new PrismaClient()
-
+const prisma = new PrismaClient();
 
 const createVehicleController: RequestHandler = async (req, res, next) => {
   try {
-    const result = await vehicleProfileService.createVehicleService(req.body)
+    const result = await vehicleProfileService.createVehicleService(req.body);
     return sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
       message: 'Vehicle added successful',
-      data: result
-    })
-  } catch (err) {
-    return next(err)
-  }
-}
-
-const getAllVehicleController: RequestHandler = async (req, res, next) => {
-  const sortBy: string = req.query.sortBy as string || "id";
-  try {
-
-    const { page = 1, size = 10, sortOrder = "asc", make, model, vehicleName, search } = req.query
-    // Define filter conditions
-    const filters: any = {
-      AND: [],
-    };
-    if (make) {
-      filters.AND.push({ price: { gte: parseFloat(make.toString()) } });
-    }
-    if (model) {
-      filters.AND.push({ price: { gte: parseFloat(model.toString()) } });
-    }
-    if (vehicleName) {
-      filters.AND.push({ price: { gte: parseFloat(vehicleName.toString()) } });
-    }
-    if (search) {
-      filters.AND.push({
-        OR: [{ title: { contains: search.toString(), mode: "insensitive" } }],
-      });
-    }
-    const skip = (Number(page) - 1) * Number(size);
-    const total = await prisma.vehicleProfile.count({
-      where: filters,
-    });
-    const totalPage = Math.ceil(total / Number(size));
-    const result = await prisma.vehicleProfile.findMany({
-      where: filters,
-      skip,
-      take: Number(size),
-      orderBy: {
-        [sortBy]: sortOrder,
-      },
-    });
-
-    return res.status(200).json({
-      success: true,
-      statusCode: 200,
-      message: "Books fetched successfully",
-      meta: {
-        page: Number(page),
-        size: Number(size),
-        total,
-        totalPage,
-      },
       data: result,
     });
-
-
   } catch (err) {
-    return next(err)
+    return next(err);
   }
+};
 
-}
+const getAllVehicleController: RequestHandler = async (req, res, next) => {
+  try {
+    const filterOptions = pick(req.query, [
+      'vehicle_make',
+      'vehicleName',
+      'purchase_date',
+      'registeration_date',
+      'color',
+      'registeration_validity',
+      'present_km',
+      'mileage',
+      'price',
+      'fuel_type',
+      'body_type',
+      'model_name',
+      'registration_no',
+      'engine_no',
+      'manufacturing_date',
+      'cubic_capacity',
+      'engine_capacity',
+      'sitting_capacity',
+      'chassis_no',
+      'userId',
+    ]);
+    const paginationOptions = pick(req.query, paginationOptionFields);
+
+    const response = await vehicleProfileService.getAllVehicleService(
+      paginationOptions,
+      filterOptions
+    );
+    return sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'vehicleProfile retrieved successfully',
+      data: response,
+    });
+  } catch (err) {
+    return next(err);
+  }
+};
+const getSingleVehicleController: RequestHandler = async (
+  req: any,
+  res: any,
+  next: any
+) => {
+  try {
+    const id = await req?.params?.id;
+    const result = await vehicleProfileService.getSingleVehicleService(id);
+    return sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Single Vehicle get successful',
+      data: result,
+    });
+  } catch (err) {
+    return next(err);
+  }
+};
 
 const deleteVehicleController: RequestHandler = async (req, res, next) => {
   try {
@@ -95,14 +98,13 @@ const deleteVehicleController: RequestHandler = async (req, res, next) => {
       statusCode: httpStatus.OK,
       success: true,
       message: 'Vehicle deleted successful',
-      data: result
-    })
+      data: result,
+    });
   } catch (err) {
-    return next(err)
+    return next(err);
   }
 };
-const updateVehicleController: RequestHandler = async (req, res, next
-) => {
+const updateVehicleController: RequestHandler = async (req, res, next) => {
   try {
     // const isAdmin = req?.user?.role === "admin";
     // if (!isAdmin) {
@@ -114,25 +116,25 @@ const updateVehicleController: RequestHandler = async (req, res, next
     // }
     const id = req?.params?.id;
     const data = req.body;
-    const result = await vehicleProfileService.updateVehicleProfileService(data, id);
+    const result = await vehicleProfileService.updateVehicleProfileService(
+      data,
+      id
+    );
     return sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
       message: 'Vehicle uodated successful',
-      data: result
-    })
+      data: result,
+    });
   } catch (err) {
-    return next(err)
+    return next(err);
   }
 };
-
 
 export const vehicleController = {
   createVehicleController,
   getAllVehicleController,
   deleteVehicleController,
-  updateVehicleController
-}
-
-
-
+  updateVehicleController,
+  getSingleVehicleController,
+};
