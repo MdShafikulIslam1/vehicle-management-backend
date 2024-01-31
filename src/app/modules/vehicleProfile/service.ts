@@ -24,7 +24,6 @@ const getAllVehicleService = async (payload:any)=>{
     return result
 }
 
-
 const updateVehicleProfileService = async (data: any, id: string) => {
     const result = await prisma.vehicleProfile.update({
       where: {
