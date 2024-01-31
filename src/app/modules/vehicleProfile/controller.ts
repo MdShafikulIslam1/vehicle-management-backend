@@ -3,6 +3,8 @@ import { vehicleProfileService } from './service';
 import sendResponse from '../../../shared/sendResponse';
 import httpStatus from 'http-status';
 import { PrismaClient } from '@prisma/client';
+import pick from '../../../shared/pick';
+import { paginationOptionFields } from '../../../common/paginationOptions';
 
 const prisma = new PrismaClient();
 
@@ -22,71 +24,37 @@ const createVehicleController: RequestHandler = async (req, res, next) => {
 
 const getAllVehicleController: RequestHandler = async (req, res, next) => {
   try {
-    const {
-      page = 1,
-      size = 10,
-      sortBy = 'id',
-      sortOrder = 'asc',
-      make,
-      model,
-      vehicleName,
-      search,
-    } = req.query;
-    // Define filter conditions
-    const filters: any = {
-      AND: [],
-    };
-    if (make) {
-      filters.AND.push({ make: { contains: make.toString() } });
-    }
-
-    if (model) {
-      filters.AND.push({ model: { contains: model.toString() } });
-    }
-
-    // Corrected filtering condition for vehicleName
-    if (vehicleName) {
-      filters.AND.push({ vehicleName: { contains: vehicleName.toString() } });
-    }
-
-    if (search) {
-      filters.AND.push({
-        OR: [
-          { vehicleName: { contains: search.toString(), mode: 'insensitive' } },
-        ],
+    const filterOptions = pick(req.query, [
+      'vehicle_make',
+      'vehicleName',
+      'purchase_date',
+      'registeration_date',
+      'color',
+      'registeration_validity',
+      'present_km',
+      'mileage',
+      'price',
+      'fuel_type',
+      'body_type',
+      'model_name',
+      'registration_no',
+      'engine_no',
+      'manufacturing_date',
+      'cubic_capacity',
+      'engine_capacity',
+      'sitting_capacity',
+      'chassis_no',
+      'userId',
+    ])
+    const paginationOptions = pick(req.query, paginationOptionFields)
+    
+    const response = await vehicleProfileService.getAllVehicleService(paginationOptions,filterOptions)
+   return sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "vehicleProfile retrieved successfully",
+        data: response,
       });
-    }
-
-    const skip = (Number(page) - 1) * Number(size);
-    const total = await prisma.vehicleProfile.count({
-      where: filters,
-    });
-
-    const totalPage = Math.ceil(total / Number(size));
-
-    const result = await prisma.vehicleProfile.findMany({
-      where: filters,
-      skip,
-      take: Number(size),
-      orderBy: {
-        [sortBy as string]: sortOrder,
-      },
-      include: {
-        user: true,
-      },
-    });
-    return res.status(200).json({
-      success: true,
-      statusCode: 200,
-      message: 'Books fetched successfully',
-      meta: {
-        page: Number(page),
-        size: Number(size),
-        total,
-        totalPage,
-      },
-      data: result,
-    });
   } catch (err) {
     return next(err);
   }
