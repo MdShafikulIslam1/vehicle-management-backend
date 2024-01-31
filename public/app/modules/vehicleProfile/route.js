@@ -10,7 +10,7 @@ const validateUser_1 = __importDefault(require("../../middlewares/validateUser")
 const validation_1 = require("./validation");
 // import { authControllers } from './controller'
 const router = express_1.default.Router();
-router.post('/', (0, validateUser_1.default)(validation_1.vehicleProfileValidation.createVehicleProfile), controller_1.vehicleController.createVehicleController);
+router.post('/create', (0, validateUser_1.default)(validation_1.vehicleProfileValidation.createVehicleProfile), controller_1.vehicleController.createVehicleController);
 router.get('/', controller_1.vehicleController.getAllVehicleController);
 router.get('/:id', controller_1.vehicleController.getSingleVehicleController);
 router.delete('/:id', controller_1.vehicleController.deleteVehicleController);

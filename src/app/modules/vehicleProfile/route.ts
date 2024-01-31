@@ -8,7 +8,7 @@ import Auth from '../../middlewares/Auth';
 
 const router = express.Router()
 
-router.post('/',validateRequest(vehicleProfileValidation.createVehicleProfile),vehicleController.createVehicleController )
+router.post('/create',validateRequest(vehicleProfileValidation.createVehicleProfile),vehicleController.createVehicleController )
 router.get('/',vehicleController.getAllVehicleController)
 router.get('/:id',vehicleController.getSingleVehicleController)
 router.delete('/:id',vehicleController.deleteVehicleController)
