@@ -33,6 +33,7 @@ model User {
 
   vehicleProfiles VehicleProfile[]
   // drivers     Driver[]     @relation("drivers", fields: [id]) // Updated opposite relation for drivers
+  driver          Driver?
 
   @@map("users")
 }
@@ -78,6 +79,7 @@ model VehicleProfile {
   maintenances Maintenance[]
   createAt     DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
+  driver       Driver[]
 
   @@map("vehicleProfiles")
 }
@@ -128,14 +130,18 @@ model Maintenance {
 // }
 
 // Driver model
-// model Driver {
-//   id         String    @id @default(uuid())
-//   name       String
-//   driverId   String
-//   vehicleId  String
-//   drivers     User[] @relation(fields: [driverId], references: [id])
-//   vehicles   VehicleProfile[] @relation(fields: [vehicleId], references: [id]) // Opposite relation for drivers
-// }
+model Driver {
+  licenseNo String
+  driverId  String         @unique
+  driver    User           @relation(fields: [driverId], references: [id])
+  vehicleId String
+  vehicle   VehicleProfile @relation(fields: [vehicleId], references: [id])
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  @@id([driverId, vehicleId])
+  @@map("drivers")
+}
 
 // Vendor model
 // model Vendor {
