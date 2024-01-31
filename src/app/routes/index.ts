@@ -12,6 +12,10 @@ const ModuleRoute = [
         path: '/auth',
         routes: AuthRouter
     },
+     {
+        path: '/vehicleProfile',
+        routes: vehicleProfileRouter
+    },
     {
         path: '/maintenance',
         routes: MaintenanceRouter
