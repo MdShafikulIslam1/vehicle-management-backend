@@ -39,33 +39,12 @@ model User {
 
 // Vehicle model
 model VehicleProfile {
-  id                     String   @id @default(uuid())
-  vehicle_make           String
-  vehicleName            String
-  photo                  String
-  purchase_date          String
-  registeration_date     String
-  color                  String
-  registeration_validity String
-  present_km             String
-  mileage                String
-  price                  String
-  fuel_type              String
-  body_type              String
-  model_name             String
-  registration_no        String
-  engine_no              String
-  manufacturing_date     String
-  cubic_capacity         String
-  engine_capacity        String
-  sitting_capacity       String
-  chassis_no             String
-  userId                 String
-  user                   User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  // year                   String
-  // vin                    String
-  // make_Id                String
-  // model_Id               String
+  id           String @id @default(uuid())
+  make         String
+  model        String
+  registration String
+  userId       String
+  user         User   @relation(fields: [userId], references: [id])
   // maintenance    Maintenance[]   // One-to-Many relationship with maintenance tasks
   // fuelExpenses   FuelExpense[]   // One-to-Many relationship with fuel expenses
   // serviceRecords ServiceRecord[] // One-to-Many relationship with service records
@@ -73,10 +52,6 @@ model VehicleProfile {
   // drivers        Driver[]        @relation("vehicles", fields: [id]) // Opposite relation for drivers
   // vendors        Vendor[]        @relation("vehicles", fields: [id]) // Opposite relation for vendors
   // fuelCards      FuelCard[]      @relation("vehicles", fields: [id]) // Opposite relation for fuel cards
-  maintenances Maintenance[]
-  createAt     DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  @@map("vehicleProfiles")
 }
 
 // Maintenance task model

@@ -3,7 +3,7 @@ import { paginationHelpers } from '../../../helpers/paginationHelpers';
 import { IGenericResponse } from '../../../interfaces/common';
 import {
   IFilters,
-  IPaginationOptions,
+  IPaginationOptions
 } from '../../../interfaces/paginationOptions';
 import { maintenance_fields_constant } from './interface';
 
@@ -11,7 +11,7 @@ const prisma = new PrismaClient();
 
 const createService = async (payload: any) => {
   const result = await prisma.maintenance.create({
-    data: payload,
+    data: payload
   });
   return result;
 };
@@ -33,10 +33,10 @@ const getAllService = async (
         return {
           [field]: {
             contains: searchTerm,
-            mode: 'insensitive',
-          },
+            mode: 'insensitive'
+          }
         };
-      }),
+      })
     });
   }
 
@@ -45,9 +45,9 @@ const getAllService = async (
     andConditions.push({
       AND: Object.keys(filterData).map(key => ({
         [key]: {
-          equals: (filterData as any)[key],
-        },
-      })),
+          equals: (filterData as any)[key]
+        }
+      }))
     });
   }
 
@@ -61,7 +61,7 @@ const getAllService = async (
     orderBy:
       paginatinOptions.sortBy && paginatinOptions.sortOrder
         ? {
-            [paginatinOptions.sortBy]: paginatinOptions.sortOrder,
+            [paginatinOptions.sortBy]: paginatinOptions.sortOrder
           }
         : { createAt: 'asc' },
     select: {
@@ -105,12 +105,12 @@ const getAllService = async (
               avatar: true,
 
               address: true,
-              location: true,
-            },
-          },
-        },
-      },
-    },
+              location: true
+            }
+          }
+        }
+      }
+    }
   });
 
   const total = await prisma.maintenance.count();
@@ -119,17 +119,17 @@ const getAllService = async (
     meta: {
       limit,
       page,
-      total,
+      total
     },
-    data: result,
+    data: result
   };
 };
 
 const singleService = async (id: string) => {
   const response = await prisma.maintenance.findFirst({
     where: {
-      id: id,
-    },
+      id: id
+    }
   });
   return response;
 };
@@ -137,9 +137,9 @@ const singleService = async (id: string) => {
 const updateService = async (data: any, id: string) => {
   const response = await prisma.maintenance.update({
     where: {
-      id: id,
+      id: id
     },
-    data: data,
+    data: data
   });
   return response;
 };
@@ -147,8 +147,8 @@ const updateService = async (data: any, id: string) => {
 const DeleteService = async (id: string) => {
   const response = await prisma.maintenance.delete({
     where: {
-      id: id,
-    },
+      id: id
+    }
   });
   return response;
 };
@@ -158,5 +158,5 @@ export const maintenanceService = {
   getAllService,
   singleService,
   updateService,
-  DeleteService,
+  DeleteService
 };

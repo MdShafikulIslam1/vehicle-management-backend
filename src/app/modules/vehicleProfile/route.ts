@@ -15,5 +15,3 @@ router.delete('/:id',vehicleController.deleteVehicleController)
 router.patch('/:id',vehicleController.updateVehicleController)
 
 export const vehicleProfileRouter = router
-
-
